@@ -1,0 +1,2 @@
+# Run once per day at midnight UTC
+0 0 * * * /usr/bin/python3 /path/to/year_progress_daily_bot.py
