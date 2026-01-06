@@ -63,3 +63,57 @@ Everything is treated with the same quiet contempt.
 2. Install dependencies:
    ```bash
    pip install requests
+   ```
+3. Edit the script and set:
+   ```python
+   BOT_TOKEN = "YOUR_BOT_TOKEN"
+   CHAT_ID = "YOUR_CHAT_ID"
+   ```
+4. Make sure the bot is a member of the Telegram group
+5. Disable privacy mode for the bot using **@BotFather**
+6. Run once to test:
+   ```bash
+   python3 year_progress_daily_bot.py
+   ```
+
+---
+
+## Automation (cron)
+
+Run once per day. Midnight UTC is thematically appropriate.
+
+Example cron entry:
+```bash
+0 0 * * * /usr/bin/python3 /path/to/year_progress_daily_bot.py
+```
+
+The bot will not post more than once per day, even if run multiple times.
+
+---
+
+## Notes
+
+- The bot stores a small local state file to prevent duplicate posts.
+- Make sure this file is ignored by git:
+  ```
+  year_progress_state.json
+  ```
+- Weather data is provided by Open-Meteo. If unavailable, the bot will comment on the failure instead of staying silent.
+- The tone is intentional and will not soften over time.
+
+---
+
+## License
+
+MIT License.
+
+Do whatever you want with it.  
+Just don’t expect it to be optimistic.
+
+---
+
+## Final warning
+
+If you are looking for encouragement, positivity, or motivation, this repository will disappoint you daily.
+
+That is the point.
