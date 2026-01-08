@@ -10,7 +10,17 @@
       "The year is young. That advantage is already shrinking.",
       "Momentum has begun forming without your input.",
       "You are still allowed to believe this can be shaped.",
-      "The countdown started quietly."
+      "The countdown started quietly.",
+      "The early days always feel less expensive.",
+      "Time is generous at first. This does not last.",
+      "This phase encourages unrealistic confidence.",
+      "You have not yet felt the weight of accumulation.",
+      "The year has not asked much of you yet.",
+      "Everything still appears adjustable.",
+      "There is room for optimism here. It will close.",
+      "The calendar has not begun applying pressure.",
+      "You are still ahead of consequences.",
+      "The illusion of control is strongest now."
     ],
     "mid": [
       "You are past the point where plans feel flexible.",
@@ -22,7 +32,17 @@
       "This no longer feels like the beginning.",
       "The calendar has stopped waiting.",
       "You are spending more time reacting than choosing.",
-      "The year is settling into memory."
+      "The year is settling into memory.",
+      "This is where time becomes expensive.",
+      "The year now expects follow-through.",
+      "Flexibility has been replaced by logistics.",
+      "You are managing outcomes rather than shaping them.",
+      "The calendar has developed expectations.",
+      "This phase rewards decisiveness you may not have.",
+      "Some options have quietly expired.",
+      "The cost of delay has increased.",
+      "Time is less patient now.",
+      "You are carrying earlier decisions forward."
     ],
     "late": [
       "Most of this year already exists only as memory.",
@@ -34,7 +54,17 @@
       "Soon this becomes historical rather than current.",
       "The year has stopped pretending to be open-ended.",
       "Time is collecting what it is owed.",
-      "This phase does not last long."
+      "This phase does not last long.",
+      "The calendar has become assertive.",
+      "What remains must be prioritized aggressively.",
+      "There is little room for revision now.",
+      "This is no longer a planning phase.",
+      "Time has shifted into extraction mode.",
+      "You are working within constraints you did not choose.",
+      "Completion has replaced exploration.",
+      "The year is narrowing toward its conclusion.",
+      "Unfinished ideas are becoming permanent.",
+      "The end is no longer abstract."
     ],
     "final": [
       "This year is finished. Nothing else fits here.",
@@ -46,7 +76,17 @@
       "The calendar has moved on.",
       "This timeline is no longer editable.",
       "The year has ended without commentary.",
-      "Nothing further will happen here."
+      "Nothing further will happen here.",
+      "The record is complete.",
+      "This year has reached a fixed state.",
+      "No additional input will be accepted.",
+      "The outcome is now permanent.",
+      "All edits have been locked.",
+      "This period has concluded.",
+      "Time has stopped accepting changes.",
+      "The year has entered archival status.",
+      "Only memory remains active.",
+      "This chapter is closed."
     ]
   },
 
@@ -61,7 +101,17 @@
       "This forecast is informational only.",
       "The sky has selected a state.",
       "Expect no assistance from this.",
-      "This will pass without apology."
+      "This will pass without apology.",
+      "The atmosphere has made its decision.",
+      "The sky is not collaborating today.",
+      "Weather is present. Interpretation is optional.",
+      "The environment remains unsympathetic.",
+      "These conditions are not personal.",
+      "The sky is proceeding as scheduled.",
+      "No accommodation is being made.",
+      "The atmosphere is indifferent to outcomes.",
+      "This forecast does not imply comfort.",
+      "The weather has no stake in this."
     ],
     "error": [
       "The sky declined to report.",
@@ -69,7 +119,11 @@
       "The atmosphere refused cooperation.",
       "No forecast. The day will happen anyway.",
       "The sky did not return our call.",
-      "Conditions unknown. Indifference confirmed."
+      "Conditions unknown. Indifference confirmed.",
+      "The atmosphere is unreachable.",
+      "Weather systems are uncommunicative today.",
+      "No data was provided. Proceed anyway.",
+      "The sky remains unavailable for comment."
     ]
   },
 
@@ -80,7 +134,15 @@
     "The number was optimistic.",
     "This is not comforting.",
     "Reality feels different than advertised.",
-    "Discomfort has its own metrics."
+    "Discomfort has its own metrics.",
+    "This sensation was not accounted for.",
+    "Your experience may vary. It usually does.",
+    "The measurement lacks empathy.",
+    "This is a subjective inconvenience.",
+    "Comfort was not guaranteed.",
+    "The reading is technically correct.",
+    "Your body has its own interpretation.",
+    "This is not the temperature you wanted."
   ],
 
   "daylight": [
@@ -90,14 +152,27 @@
     "The sun has set limits.",
     "This is all the daylight you get.",
     "Brightness is temporary.",
-    "The sun is already leaving."
+    "The sun is already leaving.",
+    "These hours will not be extended.",
+    "Light availability is finite.",
+    "Daylight is being withdrawn gradually.",
+    "The sun is not flexible.",
+    "These hours are non-renewable.",
+    "Light is operating on a schedule.",
+    "The day has a fixed allowance.",
+    "This supply will be exhausted."
   ],
 
   "daylight_error": [
     "Daylight data missing. Night remains inevitable.",
     "The sun declined to elaborate.",
     "Light schedule unknown. Darkness unchanged.",
-    "No daylight figures available. Sunset still guaranteed."
+    "No daylight figures available. Sunset still guaranteed.",
+    "The sun provided no estimates.",
+    "Light information unavailable. Outcome predictable.",
+    "Daylight could not be quantified today.",
+    "The sun is not reporting.",
+    "Light data absent. Night unaffected."
   ],
 
   "ritual": [
