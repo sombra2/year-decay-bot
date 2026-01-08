@@ -1,0 +1,106 @@
+{
+  "year": {
+    "early": [
+      "The year has started moving. It will not slow down.",
+      "This still feels manageable. That will pass.",
+      "Plenty of time remains. This belief is temporary.",
+      "The calendar is optimistic at the beginning.",
+      "Nothing irreversible has happened yet.",
+      "This is the calm part people misremember later.",
+      "The year is young. That advantage is already shrinking.",
+      "Momentum has begun forming without your input.",
+      "You are still allowed to believe this can be shaped.",
+      "The countdown started quietly."
+    ],
+    "mid": [
+      "You are past the point where plans feel flexible.",
+      "This year is no longer forgiving.",
+      "Momentum now favors time.",
+      "You are improvising more than you admit.",
+      "Most intentions have entered maintenance mode.",
+      "The margin for correction is thinner now.",
+      "This no longer feels like the beginning.",
+      "The calendar has stopped waiting.",
+      "You are spending more time reacting than choosing.",
+      "The year is settling into memory."
+    ],
+    "late": [
+      "Most of this year already exists only as memory.",
+      "There is not enough time left to do this carefully.",
+      "What remains is compressed.",
+      "You are negotiating with the calendar now.",
+      "The ending is visible from here.",
+      "The remaining days are not generous.",
+      "Soon this becomes historical rather than current.",
+      "The year has stopped pretending to be open-ended.",
+      "Time is collecting what it is owed.",
+      "This phase does not last long."
+    ],
+    "final": [
+      "This year is finished. Nothing else fits here.",
+      "The year has closed. No amendments allowed.",
+      "Everything unfinished belongs to the past now.",
+      "Time has completed its accounting.",
+      "This year will not change again.",
+      "All remaining possibilities expired quietly.",
+      "The calendar has moved on.",
+      "This timeline is no longer editable.",
+      "The year has ended without commentary.",
+      "Nothing further will happen here."
+    ]
+  },
+
+  "weather": {
+    "normal": [
+      "The sky remains indifferent.",
+      "The atmosphere continues without concern.",
+      "This will not improve your plans.",
+      "Conditions exist. Meaning is optional.",
+      "The weather will happen regardless.",
+      "Nature is not responding to feedback.",
+      "This forecast is informational only.",
+      "The sky has selected a state.",
+      "Expect no assistance from this.",
+      "This will pass without apology."
+    ],
+    "error": [
+      "The sky declined to report.",
+      "Weather data unavailable. Outcome unchanged.",
+      "The atmosphere refused cooperation.",
+      "No forecast. The day will happen anyway.",
+      "The sky did not return our call.",
+      "Conditions unknown. Indifference confirmed."
+    ]
+  },
+
+  "feels_like": [
+    "This is how it feels. Accuracy is irrelevant.",
+    "Your body disagrees with the number.",
+    "Perception has entered the equation.",
+    "The number was optimistic.",
+    "This is not comforting.",
+    "Reality feels different than advertised.",
+    "Discomfort has its own metrics."
+  ],
+
+  "daylight": [
+    "Daylight is a diminishing resource.",
+    "These are today’s usable hours.",
+    "Light has been rationed.",
+    "The sun has set limits.",
+    "This is all the daylight you get.",
+    "Brightness is temporary.",
+    "The sun is already leaving."
+  ],
+
+  "daylight_error": [
+    "Daylight data missing. Night remains inevitable.",
+    "The sun declined to elaborate.",
+    "Light schedule unknown. Darkness unchanged.",
+    "No daylight figures available. Sunset still guaranteed."
+  ],
+
+  "ritual": [
+    "This was inevitable."
+  ]
+}
