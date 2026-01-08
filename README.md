@@ -30,6 +30,19 @@ Sunny days are not celebrated.
 Bad weather is not dramatized.  
 Everything is treated with the same quiet contempt.
 
+## Design philosophy
+
+This bot is intentionally minimal.
+
+It posts once per day, says what it has to say, and leaves.  
+There is no interaction, no conversation, and no attempt to be helpful.
+
+Silence is treated as a feature.  
+Repetition is avoided deliberately.  
+Tone changes gradually, without announcements.
+
+The goal is not to shock or entertain, but to remain quietly present over long periods of time.
+
 ---
 
 ## Features
@@ -44,6 +57,17 @@ Everything is treated with the same quiet contempt.
 - Year-on-year safe
 - No duplicate messages
 - No external dependencies beyond `requests`
+
+## Non-goals
+
+This project deliberately avoids:
+- User interaction or commands
+- Personalization or tracking
+- Notifications or reminders
+- Motivation, encouragement, or advice
+- Real-time responsiveness
+
+If you are looking for a bot that reacts, chats, or adapts to users, this is not that.
 
 ---
 
@@ -112,8 +136,8 @@ Just don’t expect it to be optimistic.
 
 ---
 
-## Final warning
+## Final note
 
-If you are looking for encouragement, positivity, or motivation, this repository will disappoint you daily.
+This bot will not improve your mood, productivity, or outlook.
 
-That is the point.
+It exists to measure time, report conditions, and move on.
