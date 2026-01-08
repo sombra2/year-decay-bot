@@ -1,243 +1,173 @@
 import requests
-from datetime import datetime, timezone, date
+from datetime import datetime, timezone
 import math
 import json
 import os
 import random
+import calendar
 
 # ─── CONFIG ────────────────────────────────────────────────────────────────
 BOT_TOKEN = "YOUR_BOT_TOKEN"
-CHAT_ID = "YOUR_CHAT_ID"
-STATE_FILE = "year_progress_state.json"
+CHAT_ID = YOUR_CHAT_ID  # int, not string
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATE_FILE = os.path.join(BASE_DIR, "year_progress_state.json")
+PHRASES_FILE = os.path.join(BASE_DIR, "phrases.json")
 
 BAR_LENGTH = 20
-
-MADRID_LAT = 40.4168 #set for Madrid, feel free to choose wherever you like
+MADRID_LAT = 40.4168
 MADRID_LON = -3.7038
 
-# ─── EMOJIS ────────────────────────────────────────────────────────────────
-DEPRESSING_EMOJIS = [
-    "☠️", "⌛", "🕰️", "🌑", "🪦", "💀", "🥀", "⚰️",
-    "🕳️", "🫥", "🧠", "🩸"
-]
+DEPRESSING_EMOJIS = ["☠️", "⌛", "🕰️", "🌑", "💀", "🥀", "⚰️", "🕳️"]
+
+# ─── LOAD PHRASES ──────────────────────────────────────────────────────────
+with open(PHRASES_FILE, "r") as f:
+    PHRASES = json.load(f)
+
+# ─── STATE ────────────────────────────────────────────────────────────────
+def load_state():
+    if not os.path.exists(STATE_FILE):
+        return {}
+    with open(STATE_FILE, "r") as f:
+        return json.load(f)
+
+def save_state(state):
+    with open(STATE_FILE, "w") as f:
+        json.dump(state, f)
+
+def pick_non_repeating(pool, key, state):
+    used = state.get(key, [])
+    choices = [p for p in pool if p not in used] or pool
+    choice = random.choice(choices)
+    state[key] = (used + [choice])[-5:]
+    return choice
+
+# ─── UTIL ──────────────────────────────────────────────────────────────────
+def send(text):
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    requests.post(url, json={
+        "chat_id": CHAT_ID,
+        "text": text,
+        "parse_mode": "Markdown"
+    }, timeout=10)
+
+def progress_bar(p):
+    filled = math.floor((p / 100) * BAR_LENGTH)
+    return "█" * filled + "░" * (BAR_LENGTH - filled)
+
+def year_progress():
+    now = datetime.now(timezone.utc)
+    start = datetime(now.year, 1, 1, tzinfo=timezone.utc)
+    end = datetime(now.year + 1, 1, 1, tzinfo=timezone.utc)
+    return (now - start).total_seconds() / (end - start).total_seconds() * 100
 
 def random_emoji():
     return random.choice(DEPRESSING_EMOJIS)
 
-# ─── YEAR QUOTES ───────────────────────────────────────────────────────────
-EARLY_QUOTES = [
-    "Time waits for no one.",
-    "The clock does not care.",
-    "This year started without your consent.",
-    "You are already spending it.",
-    "The countdown has begun.",
-    "Momentum belongs to time.",
-    "The pace has been set.",
-    "You are on borrowed hours."
-]
-
-MID_QUOTES = [
-    "You are closer to the end than the beginning.",
-    "Half of this year is already unreachable.",
-    "The future is shrinking.",
-    "Every delay is now permanent.",
-    "Time has gained leverage.",
-    "This is no longer early.",
-    "The margin for error is gone."
-]
-
-LATE_QUOTES = [
-    "Most of this year is already memory.",
-    "You are running out of year.",
-    "There is not much left to work with.",
-    "The ending is approaching.",
-    "What you did not do is now permanent.",
-    "Explanations are losing value."
-]
-
-FINAL_DAY_QUOTES = [
-    "This year is over. Nothing else will happen here.",
-    "Whatever you meant to do belongs to last year now.",
-    "You do not get to carry unfinished time forward.",
-    "Everything you didn’t do is now permanent.",
-    "The year is dead. It will not respond.",
-    "Time has finished accounting."
-]
-
-# ─── WEATHER COMMENTARY ────────────────────────────────────────────────────
-WEATHER_QUOTES = [
-    "The weather will happen regardless of your plans.",
-    "The sky remains indifferent.",
-    "Conditions exist. Satisfaction is optional.",
-    "Nature is not trying to help you.",
-    "This will not improve your mood.",
-    "The atmosphere continues its routine.",
-    "Expect nothing from this."
-]
-
-WEATHER_ERROR_QUOTES = [
-    "The sky refused to report today.",
-    "The atmosphere declined comment.",
-    "No data. Outcome unchanged.",
-    "The weather opted out.",
-    "Conditions unknown. Indifference confirmed."
-]
-
-FEELS_LIKE_QUOTES = [
-    "It feels like something else. That changes nothing.",
-    "Your body disagrees with the number.",
-    "Reality is subjective. Discomfort is not.",
-    "This is how it feels. Argue with the air.",
-    "The number was optimistic."
-]
-
-DAYLIGHT_QUOTES = [
-    "Available daylight remaining.",
-    "This is how much light you get today.",
-    "The sun is rationing itself.",
-    "These are today’s usable hours.",
-    "Daylight is not infinite."
-]
-
-DAYLIGHT_ERROR_QUOTES = [
-    "Daylight data unavailable. Night still inevitable.",
-    "The sun declined to elaborate.",
-    "Light schedule unknown. Darkness unchanged."
-]
-
-# ─── TELEGRAM ───────────────────────────────────────────────────────────────
-def send_message(text):
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    payload = {
-        "chat_id": CHAT_ID,
-        "text": text,
-        "parse_mode": "Markdown"
-    }
-    requests.post(url, json=payload, timeout=10)
-
-# ─── TIME / PROGRESS ────────────────────────────────────────────────────────
-def year_progress_percentage():
-    now = datetime.now(timezone.utc)
-    year_start = datetime(now.year, 1, 1, tzinfo=timezone.utc)
-    year_end = datetime(now.year + 1, 1, 1, tzinfo=timezone.utc)
-    elapsed = (now - year_start).total_seconds()
-    total = (year_end - year_start).total_seconds()
-    return (elapsed / total) * 100
-
-def progress_bar(percent):
-    filled = math.floor((percent / 100) * BAR_LENGTH)
-    return "█" * filled + "░" * (BAR_LENGTH - filled)
-
 # ─── WEATHER ───────────────────────────────────────────────────────────────
-def weather_code_to_text(code):
-    mapping = {
-        0: "clear sky",
-        1: "mostly clear",
-        2: "partly cloudy",
-        3: "overcast",
-        45: "fog",
-        48: "fog",
-        51: "drizzle",
-        61: "rain",
-        71: "snow",
-        80: "showers",
-        95: "thunderstorms"
-    }
-    return mapping.get(code, "indecisive sky")
-
-def get_madrid_weather():
+def get_weather():
     try:
         url = (
             "https://api.open-meteo.com/v1/forecast"
-            f"?latitude={MADRID_LAT}"
-            f"&longitude={MADRID_LON}"
-            "&daily=weathercode,temperature_2m_max,temperature_2m_min,"
+            f"?latitude={MADRID_LAT}&longitude={MADRID_LON}"
+            "&daily=temperature_2m_max,temperature_2m_min,"
             "apparent_temperature_max,sunrise,sunset"
             "&timezone=Europe/Madrid"
         )
-        r = requests.get(url, timeout=10)
-        d = r.json()["daily"]
+        d = requests.get(url, timeout=10).json()["daily"]
+        return {
+            "ok": True,
+            "tmin": d["temperature_2m_min"][0],
+            "tmax": d["temperature_2m_max"][0],
+            "feels": d["apparent_temperature_max"][0],
+            "sunrise": d["sunrise"][0],
+            "sunset": d["sunset"][0]
+        }
+    except:
+        return {"ok": False}
 
-        tmin = d["temperature_2m_min"][0]
-        tmax = d["temperature_2m_max"][0]
-        feels = d["apparent_temperature_max"][0]
-        code = d["weathercode"][0]
-
-        sunrise = datetime.fromisoformat(d["sunrise"][0])
-        sunset = datetime.fromisoformat(d["sunset"][0])
-        daylight_hours = (sunset - sunrise).total_seconds() / 3600
-
-        return True, tmin, tmax, feels, weather_code_to_text(code), daylight_hours
-    except Exception:
-        return False, None, None, None, None, None
-
-# ─── STATE ────────────────────────────────────────────────────────────────
-def load_last_sent():
-    if not os.path.exists(STATE_FILE):
-        return None
-    with open(STATE_FILE, "r") as f:
-        return json.load(f).get("last_sent")
-
-def save_last_sent(value):
-    with open(STATE_FILE, "w") as f:
-        json.dump({"last_sent": value}, f)
-
-# ─── MAIN ───────────────────────────────────────────────────────────────────
+# ─── MAIN ──────────────────────────────────────────────────────────────────
 def main():
-    now = datetime.now(timezone.utc)
-    today_key = now.strftime("%Y-%m-%d")
-    if load_last_sent() == today_key:
+    state = load_state()
+    today = datetime.now(timezone.utc)
+    today_key = today.strftime("%Y-%m-%d")
+
+    if state.get("last_sent") == today_key:
         return
 
-    percent = year_progress_percentage()
-    percent_str = f"{percent:.2f}"
+    # Random silence days (1–2 per month)
+    month_key = today.strftime("%Y-%m")
+    silence_days = state.get("silence_days", {})
+    if month_key not in silence_days:
+        days = calendar.monthrange(today.year, today.month)[1]
+        silence_days[month_key] = random.sample(range(1, days + 1), random.randint(1, 2))
+        state["silence_days"] = silence_days
+
+    if today.day in silence_days[month_key]:
+        state["last_sent"] = today_key
+        save_state(state)
+        return
+
+    percent = year_progress()
     bar = progress_bar(percent)
 
-    is_final_day = now.month == 12 and now.day == 31
+    is_final = today.month == 12 and today.day == 31
 
-    if is_final_day:
-        quote = random.choice(FINAL_DAY_QUOTES)
+    if is_final:
+        quote = pick_non_repeating(PHRASES["year"]["final"], "year_final", state)
         title = "📆 *Year completed*"
     elif percent < 35:
-        quote = random.choice(EARLY_QUOTES)
+        quote = pick_non_repeating(PHRASES["year"]["early"], "year_early", state)
         title = "📆 *Year progress update*"
     elif percent < 70:
-        quote = random.choice(MID_QUOTES)
+        quote = pick_non_repeating(PHRASES["year"]["mid"], "year_mid", state)
         title = "📆 *Year progress update*"
     else:
-        quote = random.choice(LATE_QUOTES)
+        quote = pick_non_repeating(PHRASES["year"]["late"], "year_late", state)
         title = "📆 *Year progress update*"
 
-    emoji = random_emoji()
+    # Monthly ritual
+    ritual = ""
+    if today.day == 1:
+        ritual = f"\n_{PHRASES['ritual'][0]}_\n"
 
-    ok, tmin, tmax, feels, condition, daylight = get_madrid_weather()
+    w = get_weather()
 
-    if ok:
+    if w["ok"]:
+        daylight_hours = (
+            datetime.fromisoformat(w["sunset"]) -
+            datetime.fromisoformat(w["sunrise"])
+        ).total_seconds() / 3600
+
         weather_block = (
             f"\n🌍 *Madrid weather*\n"
-            f"{tmin:.0f}°C – {tmax:.0f}°C, {condition} {random_emoji()}\n"
-            f"Feels like {feels:.0f}°C. {random.choice(FEELS_LIKE_QUOTES)}\n"
-            f"{daylight:.1f}h daylight. {random.choice(DAYLIGHT_QUOTES)}\n"
-            f"_{random.choice(WEATHER_QUOTES)}_\n"
+            f"{w['tmin']:.0f}°C – {w['tmax']:.0f}°C {random_emoji()}\n"
+            f"Feels like {w['feels']:.0f}°C. "
+            f"{pick_non_repeating(PHRASES['feels_like'], 'feels', state)}\n"
+            f"{daylight_hours:.1f}h daylight. "
+            f"{pick_non_repeating(PHRASES['daylight'], 'daylight', state)}\n"
+            f"_{pick_non_repeating(PHRASES['weather']['normal'], 'weather', state)}_\n"
         )
     else:
         weather_block = (
             f"\n🌍 *Madrid weather*\n"
             f"Unavailable {random_emoji()}\n"
-            f"_{random.choice(WEATHER_ERROR_QUOTES)}_\n"
-            f"_{random.choice(DAYLIGHT_ERROR_QUOTES)}_\n"
+            f"_{pick_non_repeating(PHRASES['weather']['error'], 'weather_err', state)}_\n"
+            f"_{pick_non_repeating(PHRASES['daylight_error'], 'daylight_err', state)}_\n"
         )
 
     message = (
         f"{title}\n\n"
         f"`{bar}`\n"
-        f"*{percent_str}%* of the year is gone {emoji}\n"
-        f"{weather_block}\n"
+        f"*{percent:.2f}%* of the year is gone {random_emoji()}\n"
+        f"{weather_block}"
+        f"{ritual}\n"
         f"_{quote}_"
     )
 
-    send_message(message)
-    save_last_sent(today_key)
+    send(message)
+    state["last_sent"] = today_key
+    save_state(state)
 
 if __name__ == "__main__":
     main()
